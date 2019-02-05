@@ -13,7 +13,6 @@ mongoose.Promise = global.Promise;
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header(
@@ -29,7 +28,6 @@ app.use((req, res, next) => {
 
 app.use('/products', productRoutes);
 app.use('/orders', orderRoutes);
-
 app.use((req, res, next) => {
     const error = new Error('Not Found');
     error.status = 404;

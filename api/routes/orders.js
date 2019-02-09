@@ -12,7 +12,6 @@ router.get('/', (req, res, next) => {
             count: docs.length,
             orders: docs.map(doc => {
                 return {
-                    // Add more fields. Is order ID value different from the request ID?
                     quantity: doc.quantity,
                     _id: doc._id,
                     request: {
@@ -139,7 +138,7 @@ router.delete('/:orderId', (req, res, next) => {
         res.status(500).json({
             error: err
         });
-    })
+    });
 });
 
 module.exports = router;

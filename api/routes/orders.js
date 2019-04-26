@@ -5,23 +5,23 @@ const Order = require('../models/orders')
 
 router.get('/', (req, res, next) => {
     Order.find()
-    .select('quantity _id')
+    .select('product quantity _id')
     .exec()
     .then(docs => {
-        const response = {
+        res.status(200).json({
             count: docs.length,
             orders: docs.map(doc => {
                 return {
-                    quantity: doc.quantity,
                     _id: doc._id,
+                    product: doc.product,
+                    quantity: doc.quantity,
                     request: {
                         type: 'GET',
-                        url: 'http://localhost:3000/orders/' + order._id
+                        url: 'http://localhost:300/orders/' + doc._id
                     }
                 }
             })
-        };
-        res.status(200).json(response);
+        });
     })
     .catch(err => {
         res.status(500).json({
@@ -32,15 +32,22 @@ router.get('/', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
     const order = new Order({
-        orderId: new mongoose.Types.ObjectId(),
-        quantity: req.body.quantity
+        _id: mongoose.Types.ObjectId(),
+        quantity: req.body.quantity,
+        product: req.body.productId
     });
     order
     .save()
     .then(result => {
         console.log(result);
+        res.status(201),json(result);
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        })
+    });
     res.status(201).json({
         message: 'Handling POST requests to /orders',
         createOrder: {
